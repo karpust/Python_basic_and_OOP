@@ -368,40 +368,93 @@ new = 'Hello,\tWorld'.isprintable()  # => False
 new = 'Hello, World\n'.isprintable()  # => False
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+""" ------------------------ модуль string стандартной библиотеки -------------------------- """
+import string
+s = string.ascii_letters  # => 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ'
+s = string.ascii_lowercase  # => 'abcdefghijklmnopqrstuvwxyz'
+s = string.ascii_uppercase  # => 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'
+s = string.digits  # => '0123456789'
+s = string.hexdigits  # => '0123456789abcdefABCDEF'
+s = string.octdigits  # => '01234567'
+s = string.punctuation  # => '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+s = string.printable  # => '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!
+# "#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~ \t\n\r\x0b\x0c
+s = string.whitespace  # => ' \t\n\r\x0b\x0c'
 
 
 """------------------------------------- Форматирование строк -------------------------------------"""
-# format()
+# старый способ % :
+print("Hi, my name is %s" % "Jessica")  # => 'Hi, my name is Jessica'
+
 # s.format(*args, **kwargs)
 # форматирует выбранные значения и вставляет их вместо заглушек:
 s = "My name is {name}, I'm {age}".format(name="John", age=36)  # => My name is John, I'm 36
 s = "My name is {0}, I'm {1}".format('John', 36)  # same
+s = "My name is {1}, I'm {0}".format('John', 36)  # => My name is 36, I'm John
 s = "My name is {}, I'm {}".format('John', 36)  # same
-# внутри заглушет тоже можно форматировать:
+s = "My name is {}, I'm {}".format(*('John', 36))  # same
+# внутри заглушек тоже можно форматировать:
 s = 'We have {:>8} chickens'  # по правому краю. есть и другие
 new = s.format(10)  # => 'We have       10 chickens'
+# аргументы по имени исп распаковку словаря:
+coord = {'latitude': '37.24N', 'longitude': '-115.81W'}
+'Coordinates: {latitude}, {longitude}'.format(**coord)
+
+
+# f-строки:
+# такое форматирование вып быстрее чем .format()
+# могут выполнять:
+print(f"{2 * 2}")  # выражения => 4
+name = 'Vasia'
+def my_func(some_name): return some_name
+print(f"{my_func(name)}")  # вызов функции с аргументами => Vasia
+print(f"{'hello, world!'.title()}")  # методы => Hello, World!
+print(f"Привет, \'{name}\'")  # бэкслеш дб вне {}
+# print(f"{\"Python\"}")  # иначе SyntaxError
+person = {"name": "Игорь", "age": 19}
+print(f'{person["name"]}, {person["age"]} лет.')  # для ключа нужны другие кавычки
+# уст ширину поля:
+first_name = 'Nik'
+experience = 5
+print(f'Имя |{first_name:<10}| Возраст |{experience:<10d}|')  # => 'Имя |Nik       | Возраст |5         |'
+# кол-во знаков после в дробной части:
+number = 23.8589578
+print("{:.2f}".format(number))  # 23.86
+print("{:.3f}".format(number))  # 23.859
+print("{:.4f}".format(number))  # 23.8590
+name = "Fred"
+print(f"He said his name is {name}.")  # => "He said his name is Fred."
+print(f"He said his name is {name!r}.")  # => "He said his name is 'Fred'."
+print(f"He said his name is {repr(name)}.")  # => repr() is equivalent to !r
+width = 10
+precision = 4
+import decimal
+value = decimal.Decimal("12.34567")
+print(f"result: {value:{width}.{precision}}")  # => 'result:      12.35'
+from datetime import datetime
+today = datetime(year=2017, month=1, day=27)  # => datetime.datetime(2017, 1, 27, 0, 0) <class 'datetime.datetime'>
+print(f"{today:%B %d, %Y}")  # => 'January 27, 2017' using date format codes
+print(f"{today=:%B %d, %Y}")  # => 'today=January 27, 2017'
+print(f'{name=}')  # => "name='Fred'"
+print(f'{ name = }')  # => " name = 'Fred'" - сохранит пробелы
+number = 1024
+print(f"{number:#0x}")  # => '0x400'  using integer format specifier
+'0x400'
+line = "The mill's closed"
+print(f"{line = }")  # => 'line = "The mill\'s closed"'
+print(f"{line = :20}")  # => "line = The mill's closed   "
+
+"""
+s: для вставки строк;
+d: для вставки целых чисел;
+f: для вставки дробных чисел. через точку можно определить количество знаков в дробной части;
+%: умножает значение на 100 и добавляет знак процента;
+e: выводит число в экспоненциальной записи.
+"""
+
+# шаблонные строки:
+from string import Template
+print(Template("I love to learn with $name!").substitute(name="myself"))
 
 # format_map()
 # s.format_map(mapping) почти то же что s.format(**mapping)
@@ -421,11 +474,6 @@ class MyDict(dict):  # создали подкласс словаря, чтоб�
 
 new = '{name} was born in {country}'.format_map(MyDict(name='Guido'))  # => Guido was born in country
 # new = '{name} was born in {country}'.format(**MyDict(name='Guido'))  # не даст вызвать __missing__: KeyError
-
-
-# index()
-
-print(new)
 
 
 # задачка с собеса:
