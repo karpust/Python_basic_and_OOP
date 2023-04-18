@@ -42,7 +42,6 @@ print(f'Цвет класса: {Point.class_color}')  # red
 # print(Point.__class__)  # <class 'type'>
 # print(p.__class__)  # <class '__main__.Point'>
 # print(Point.__doc__)  # документация
-# print(dir())  # список имен в текущей локальной области
 
 
 """

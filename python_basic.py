@@ -174,124 +174,14 @@ a = [x * x for x in range(10)]  # -> list
 функции создающие генераторы:
 
 """
-"""
-    map() 
--------------------------------------------------------------------
-- создает итератор кот вычисляет ф-цию с каждым эл из iterable
-map(func, iterable) -> iterator
-написан на C и сильно оптимизирован и эффективнее цикла for
-"""
-def square(num): return num ** 2
-sq = map(square, range(5))  # <class 'map'>  итератор
-# или так:
-sq = map(lambda x: x ** 2, range(5))
-print(next(sq))
-print(list(sq))  # т к вернет итератор надо -> в список
-# еще map:
-p = list(map(pow, range(1, 4), range(1, 4)))  # pow() принимает x и y, возвращает x в степени y
-list(map(lambda x, y: x - y, [2, 4, 6], [1, 3, 5]))  # -> [2-1, 4-3, 6-5]
-list(map(lambda x, y, z: x + y + z, [2, 4], [1, 3], [7, 8]))  # -> [2+1+7, 4+3+8]
 
 
-"""
-    zip()
---------------------------------------------------------------------------
-- создает итератор кот проходит несколько iterables параллельно 
-и создает кортежи из каждого их элемента
-zip(*iterables, strict=False) 
-т е транспонирует матрицу
-может принимать iterables разной длины тогда:
-    по умолчанию zip остановится когда меньший закончится
-    если strict=True - выкинет ValueError
-чтобы zip ориентировался на больший, меньший можно дозаполнить
-значениями через itertools.zip_longest()
-"""
-zp = zip(range(3), ('a', 'b', 'c'))  # <class 'zip'>  это итератор
-print(next(zp))  # (0, 'a')
-print(next(zp))  # (1, 'b')
-print(next(zp))  # (2, 'c')
-zp = list(zip(range(3), ('a', 'b', 'c')))  # -> [(0, 'a'), (1, 'b'), (2, 'c')]
-zp2 = list(zip(range(2)))  # -> [(0,), (1,)]
-
-# распаковка:
-x, y = [1, 2, 3], [4, 5, 6]
-un_zp1, un_zp2 = zip(*zip(x, y))  # распаковка кортежей <class 'tuple'>
-un_zp3 = [*zip([1, 2, 3], [4, 5, 6])]  # unpack zip in list
-un_zp4 = {*zip([1, 2, 3], [4, 5, 6])}  # unpack zip in set
-
-# параллельные итерации
-# (одновременно проитись по неск контейнерам):
-for i, j in zip(x, y):
-    print(i)
-    print(j)
-
-# создание словаря:
-dict1 = dict(zip(x, y))
-# параллельная итерация по словарям:
-dict_one = {'name': 'John', 'last_name': 'Doe', 'job': 'Python Consultant'}
-dict_two = {'name': 'Jane', 'last_name': 'Doe', 'job': 'Community Manager'}
-for (k1, v1), (k2, v2) in zip(dict_one.items(), dict_two.items()):
-    print(k1, '->', v1)
-    print(k2, '->', v2)
-
-# одновременно сортировать два списка:
-letters = ['b', 'a', 'd', 'c']
-numbers = [2, 4, 3, 1]
-data1 = list(zip(letters, numbers))  # [('b', 2), ('a', 4), ('d', 3), ('c', 1)]
-data1.sort()  # sort by letters: [('a', 4), ('b', 2), ('c', 1), ('d', 3)]
-data2 = list(zip(numbers, letters))  # [(2, 'b'), (4, 'a'), (3, 'd'), (1, 'c')]
-data2.sort()  # sort by numbers: [(1, 'c'), (2, 'b'), (3, 'd'), (4, 'a')]
-
-# вычисления в парах:
-total_sales = [10, 20, 30]
-prod_cost = [2, 4, 6]
-for sales, costs in zip(total_sales, prod_cost):
-    profit = sales - costs
-    print(f'Total profit: {profit}')
 
 
-"""
-    enumerate()
-----------------------------------------------------------------------------------
-- создает герератор кот из iterable создает кортеж 
-кот включает в себя индекс элемента и его значения
-enumerate(iterable)
-"""
-n = enumerate(letters)  # <class 'enumerate'>  это генератор
-n = list(enumerate(letters))  # список кортежей
-for l in enumerate(letters):
-    print(l)  # (0, 'b') и т д
-    print(l[0], l[1])  # можно распаковать
-
-a = [10, 20, 30, 40]
-for id, item in enumerate(a):
-    id = item + 5
-    print(id, item)
 
 
-"""
-    filter()
--------------------------------------------------------------------------------------
-filter(func, iterable)
-- создает iterator из тех элементов iterable для кот функция вернет True,
-если функ вернет None в iterator попадут только True-элементы 
-(в таком случае надо исп itertools.filterfalse())
 
-is equivalent to the generator expression 
-(item for item in iterable if function(item)) 
-if function is not None 
-and (item for item in iterable if item) if function is None.
-"""
-def is_not_zero(el): return el if el != 0 else None
-ft = filter(is_not_zero, range(4))  #  <class 'filter'>  итератор
-fl = list(filter(is_not_zero, range(4)))  # [1, 2, 3]
-even_numbers_iterator = filter(lambda x: (x % 2 == 0), numbers)
 
-# if function is None is equal (item for item in iterable if item):
-r_list = [1, 'a', 0, False, True, '0']
-fi = filter(None, r_list)
-fl = list(fi)  # [1, 'a', True, '0']
-print(fl)
 
 
 """
@@ -324,17 +214,6 @@ all_max = reduce(lambda a, b: a if (a > b) else b, items)  # ищет max
 
 
 """
-    open()
-------------------------------------------------------------------------------------------
-открывает файл и создает соотв ему file-object - итератор
-
-f = open('1', 'r')
-print(dir(f))
-print(type(f))
-"""
-
-
-"""
     * распаковка ===========================================================
 """
 # * - iterable unpacking - распаковка итерируемого
@@ -359,13 +238,7 @@ func = lambda x, y: x ** y  # антипатерн, не надо присваи
 def my_func(x, y): return x ** y if y != 0 else None  # лучше так: однострочный def
 
 
-# any() вернет True если хотябы 1 эл из iterable это True
-print(any(x > 10 for x in range(1000)))
 
-#  all()  вернет True если все True в iterable
-all([1, 2, 3, 5])  # True
-all([0, 2, 3, 5])  # False
-all([])  # True
 
 
 """
