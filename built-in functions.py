@@ -140,13 +140,14 @@ exec(byte_code)
 
 # eval(expression, globals=None, locals=None)
 '''
+выполняет строку как код питона и возвращает то что вернет этот код.
 где globals - дб словарем, locals - любым mapping,
 by default выполняет код в текущ обл видимости, если не переданы globals и locals;
 expression - выражение python или <class 'code'> кот вернул compile()
-выполняет строку как код питона и возвращает то что вернет этот код
 не имеет доступа к nonlocals
 работает не быстро, тк компилирует и выполняет
-проблема с безопасностью - не проверяется источник строки'''
+проблема с безопасностью - не проверяется источник строки
+чтобы ист строки проверялся исп модуль pickle.'''
 eval('print(5)')  # => вычислит 5, но вернет None тк print()
 x = 1
 x = eval('x+1')  # => вернет 2
@@ -509,6 +510,7 @@ int(bytearray(b'5'))  # => 5
 
 # isinstance(object, classinfo)
 # isinstance(obj, union_object)
+# проверяет явл ли объект экз-ром класса или его подкласса
 # вернет True если object явл экз класса classinfo или union_object
 isinstance(1, int)  # => True
 isinstance(1, int | str | float)  # => True, union_object
@@ -846,6 +848,7 @@ that the parameters prior to it are positional-only: divmod(x, y, /)
 """ private name mangling happens at compilation time"""
 
 """ асинхронщина """
+
 # aiter(async_iterable)
 # вернет асинхронный итератор для асинхр iterable:
 # lst = [1, 2, 3, 4]
